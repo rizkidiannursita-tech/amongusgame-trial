@@ -92,23 +92,31 @@ export default function App() {
   const goAdmin = () => { const u = new URL(window.location.href); u.searchParams.set("mode","admin"); window.location.href = u.toString(); };
   const goPlayer = () => { const u = new URL(window.location.href); u.searchParams.set("mode","player"); window.location.href = u.toString(); };
 
-  return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <div className="mx-auto max-w-6xl px-4 py-6">
-        <header className="flex items-center justify-between gap-4">
-          <h1 className="text-2xl sm:text-3xl font-bold">Among Us – English Club (Web Game)</h1>
+return (
+  <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="mx-auto max-w-6xl px-4 py-6">
+      <header className="flex items-center justify-between gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold">Among Us – English Club (Web Game)</h1>
+
+        {/* Tampilkan tombol hanya di Admin */}
+        {mode === "admin" ? (
           <div className="flex items-center gap-2">
-            <button onClick={goAdmin} className={`px-3 py-1.5 rounded-full text-sm font-semibold ${mode==="admin"?"bg-indigo-600 text-white":"bg-white border"}`}>Admin</button>
-            <button onClick={goPlayer} className={`px-3 py-1.5 rounded-full text-sm font-semibold ${mode==="player"?"bg-indigo-600 text-white":"bg-white border"}`}>Player</button>
+            <button onClick={() => { const u = new URL(window.location.href); u.searchParams.set("mode","admin"); window.location.href = u.toString(); }} className="px-3 py-1.5 rounded-full text-sm font-semibold bg-indigo-600 text-white">Admin</button>
+            <button onClick={() => { const u = new URL(window.location.href); u.searchParams.set("mode","player"); window.location.href = u.toString(); }} className="px-3 py-1.5 rounded-full text-sm font-semibold bg-white border">Player</button>
           </div>
-        </header>
-        {mode === "player" ? <PlayerView /> : <AdminView />}
-        <footer className="mt-10 text-xs text-slate-500">
-          <p>Roles & words are deterministic per <em>Room Code</em> and <em>Round</em>. Share Player Link/QR for each round.</p>
-        </footer>
-      </div>
+        ) : null}
+      </header>
+
+      {/* Hard-lock: kalau mode=player, JANGAN render AdminView sama sekali */}
+      {mode === "player" ? <PlayerView /> : <AdminView />}
+
+      <footer className="mt-10 text-xs text-slate-500">
+        <p>Roles & words are deterministic per <em>Room Code</em> and <em>Round</em>.</p>
+      </footer>
     </div>
-  );
+  </div>
+);
+
 }
 
 function AdminView() {
